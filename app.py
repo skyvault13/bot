@@ -32,8 +32,8 @@ CONTACTS_TEXT = """
 
 Аккаунты в Telegram:
 @oolleesshh Олешко Виктория
-@im_emii Караева Эмилия 
-@a_rinaa Борзина Арина 
+@im\_emii Караева Эмилия 
+@a\_rinaa Борзина Арина 
 @stlunth Стрюкова Елизавета 
 @rakitinass Ракитина Анастасия
 @sokolovaapsy Соколова Анастасия
@@ -45,7 +45,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     """Обработчик команды /start - показывает главное меню"""
     # Создаем клавиатуру с кнопками
     keyboard = [
-        [KeyboardButton("📄 Получить инструкция")],
+        [KeyboardButton("📄 Получить брошюру")],
         [KeyboardButton("📞 Контакты")]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
@@ -64,8 +64,8 @@ async def handle_instruction_button(update: Update, context: CallbackContext) ->
         with open("брошюра_буллинг2.pdf", "rb") as file:
             await update.message.reply_document(
                 document=file,
-                filename="Инструкция_буллинг.pdf",
-                caption="📎 Вот ваша инструкция в виде файла"
+                filename="Брошюра_буллинг.pdf",
+                caption="📎 Вот ваша брошюра в виде файла"
             )
     except Exception as e:
         logger.error(f"Ошибка при отправке инструкции: {e}")
@@ -79,7 +79,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
     """Обработчик текстовых сообщений"""
     text = update.message.text
     
-    if text == "📄 Получить инструкция":
+    if text == "📄 Получить брошюру":
         await handle_instruction_button(update, context)
     elif text == "📞 Контакты":
         await handle_contacts_button(update, context)
