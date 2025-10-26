@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Токен бота из переменных окружения Heroku
+# Токен бота из переменных окружения
 BOT_TOKEN = os.environ.get('BOT_TOKEN', '8237153560:AAGiqIBs6xhDQ0c8p6xbYlob-fd9X2VZQxw')
 
 # Текст инструкции
@@ -45,7 +45,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     """Обработчик команды /start - показывает главное меню"""
     # Создаем клавиатуру с кнопками
     keyboard = [
-        [KeyboardButton("📄 Получить инструкцию")],
+        [KeyboardButton("📄 Получить инструкция")],
         [KeyboardButton("📞 Контакты")]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
@@ -79,7 +79,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
     """Обработчик текстовых сообщений"""
     text = update.message.text
     
-    if text == "📄 Получить инструкцию":
+    if text == "📄 Получить инструкция":
         await handle_instruction_button(update, context)
     elif text == "📞 Контакты":
         await handle_contacts_button(update, context)
@@ -116,6 +116,7 @@ def main() -> None:
     
     # Запускаем бота
     logger.info("Бот запущен...")
+    print("Бот запущен и готов к работе!")
     application.run_polling()
 
 if __name__ == '__main__':
