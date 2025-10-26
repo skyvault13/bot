@@ -1,7 +1,5 @@
 import os
 import logging
-import asyncio
-from flask import Flask
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 
@@ -42,21 +40,6 @@ CONTACTS_TEXT = """
 
 Мы всегда рады помочь вам!
 """
-
-# Создаем Flask приложение для обхода проверки портов
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "🤖 Telegram Bot is running! Use /start in Telegram."
-
-@app.route('/health')
-def health():
-    return "OK"
-
-@app.route('/ping')
-def ping():
-    return "pong"
 
 async def start(update: Update, context: CallbackContext) -> None:
     """Обработчик команды /start - показывает главное меню"""
@@ -108,8 +91,8 @@ async def help_command(update: Update, context: CallbackContext) -> None:
     """
     await update.message.reply_text(help_text, parse_mode='Markdown')
 
-async def run_bot():
-    """Запускает Telegram бота"""
+def main():
+    """Основная функция запуска бота"""
     if not BOT_TOKEN:
         logger.error("BOT_TOKEN не установлен!")
         return
@@ -119,30 +102,9 @@ async def run_bot():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    logger.info("🤖 Telegram Bot запущен...")
-    print("🤖 Telegram Bot запущен и готов к работе!")
-    
-    # Запускаем polling
-    await application.run_polling()
-
-def start_bot():
-    """Запускает бота в asyncio event loop"""
-    asyncio.run(run_bot())
-
-def main():
-    """Основная функция"""
-    print("🚀 Starting application...")
-    
-    # Просто запускаем Flask сервер
-    # Бот будет запускаться при импорте, но polling в отдельном asyncio loop
-    port = int(os.environ.get('PORT', 10000))
-    print(f"🌐 Starting web server on port {port}...")
-    app.run(host='0.0.0.0', port=port, debug=False)
+    logger.info("Бот запущен...")
+    print("🤖 Бот запущен и готов к работе!")
+    application.run_polling()
 
 if __name__ == '__main__':
-    # Импортируем и запускаем бота при старте
-    import threading
-    bot_thread = threading.Thread(target=start_bot, daemon=True)
-    bot_thread.start()
-    
     main()
